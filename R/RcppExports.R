@@ -8,20 +8,20 @@
 #'
 #' @export
 c_test <- function(test) {
-    .Call('_optMTP_c_test', PACKAGE = 'optMTP', test)
+    .Call(`_optMTP_c_test`, test)
 }
 
 #' Multiple testing following the graph
 #'
-#'
-#' @param alpha original alpha vector
+#' @param alpha vector of the original alphas
 #' @param G     transition matrix G
-#' @param p_values  p-values for the elementary hypothesis
+#' @param p_values  vector of p-values for the elementary hypothesis
+#' @param log   TRUE: print log at each step; FALSE: silent
 #'
 #' @return Hypothesis rejection status indicator vector
 #'
 #' @export
 c_mtp <- function(p_values, alpha, G, log = FALSE) {
-    .Call('_optMTP_c_mtp', PACKAGE = 'optMTP', p_values, alpha, G, log)
+    .Call(`_optMTP_c_mtp`, p_values, alpha, G, log)
 }
 

@@ -27,10 +27,10 @@ double c_test(double test) {
 
 //' Multiple testing following the graph
 //'
-//'
-//' @param alpha original alpha vector
+//' @param alpha vector of the original alphas
 //' @param G     transition matrix G
-//' @param p_values  p-values for the elementary hypothesis
+//' @param p_values  vector of p-values for the elementary hypothesis
+//' @param log   TRUE: print log at each step; FALSE: silent
 //'
 //' @return Hypothesis rejection status indicator vector
 //'

@@ -7,11 +7,13 @@
 c_mtp(p_values, alpha, G, log = FALSE)
 }
 \arguments{
-\item{p_values}{p-values for the elementary hypothesis}
+\item{p_values}{vector of p-values for the elementary hypothesis}
 
-\item{alpha}{original alpha vector}
+\item{alpha}{vector of the original alphas}
 
 \item{G}{transition matrix G}
+
+\item{log}{TRUE: print log at each step; FALSE: silent}
 }
 \value{
 Hypothesis rejection status indicator vector
