@@ -229,7 +229,7 @@ om_rejection_optim <- function(weights, mat_g, ...,
             value <- NA
         } else {
             theta <- rst$par
-            value <- - rst$value
+            value <- -rst$value
         }
     }
 
