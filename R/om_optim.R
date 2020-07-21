@@ -180,6 +180,15 @@ om_theta_constraints <- function(mat, tot = 1) {
 #' @param par_optim options for constrOptim function
 #' @param tot restrict on the sum of parameters
 #'
+#' @details Parameters in weights and mat_g should be entered as NA. The
+#'     constraints require all the parameter to be non-negative and each row in
+#'     mat_g and weights have total 1.
+#'
+#'     Note that the first NA in each row of mat_g or weights are fixed values
+#'     given the other elements in the row in order to satisfy the constraint
+#'     that the sum is 1.
+#'
+#'
 #' @export
 #'
 om_rejection_optim <- function(weights, mat_g, ...,
@@ -187,7 +196,8 @@ om_rejection_optim <- function(weights, mat_g, ...,
                                par_optim = list()) {
 
     f_opt <- function(theta) {
-        - om_theta_rejection(theta, weights, mat_g, ...)[1]
+        uti <-  om_theta_rejection(theta, weights, mat_g, ...)[1]
+        -uti
     }
 
     ## get constraints

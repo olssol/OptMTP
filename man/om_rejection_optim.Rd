@@ -18,3 +18,12 @@ om_rejection_optim(weights, mat_g, ..., tot = 1, par_optim = list())
 \description{
 Optimize weights and G
 }
+\details{
+Parameters in weights and mat_g should be entered as NA. The
+    constraints require all the parameter to be non-negative and each row in
+    mat_g and weights have total 1.
+
+    Note that the first NA in each row of mat_g or weights are fixed values
+    given the other elements in the row in order to satisfy the constraint
+    that the sum is 1.
+}
