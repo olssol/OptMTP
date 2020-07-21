@@ -13,15 +13,15 @@ c_test <- function(test) {
 
 #' Multiple testing following the graph
 #'
-#' @param alpha vector of the original alphas
-#' @param G     transition matrix G
+#' @param alphas    vector of the original alphas
+#' @param mat_g     transition matrix G
 #' @param p_values  vector of p-values for the elementary hypothesis
-#' @param log   TRUE: print log at each step; FALSE: silent
+#' @param log       TRUE: print log at each step; FALSE: silent
 #'
 #' @return Hypothesis rejection status indicator vector
 #'
 #' @export
-c_mtp <- function(p_values, alpha, G, log = FALSE) {
-    .Call(`_optMTP_c_mtp`, p_values, alpha, G, log)
+c_mtp <- function(p_values, alphas, mat_g, log = FALSE) {
+    .Call(`_optMTP_c_mtp`, p_values, alphas, mat_g, log)
 }
 

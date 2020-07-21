@@ -24,20 +24,19 @@ double c_test(double test) {
 }
 
 
-
 //' Multiple testing following the graph
 //'
-//' @param alpha vector of the original alphas
-//' @param G     transition matrix G
+//' @param alphas    vector of the original alphas
+//' @param mat_g     transition matrix G
 //' @param p_values  vector of p-values for the elementary hypothesis
-//' @param log   TRUE: print log at each step; FALSE: silent
+//' @param log       TRUE: print log at each step; FALSE: silent
 //'
 //' @return Hypothesis rejection status indicator vector
 //'
 //' @export
 // [[Rcpp::export]]
-IntegerVector c_mtp(NumericVector p_values, NumericVector alpha, NumericMatrix G,
-										bool log = false) {
+IntegerVector c_mtp(NumericVector p_values, NumericVector alphas,
+                    NumericMatrix mat_g, bool log = false) {
 
 		int m = p_values.size();
     IntegerVector h_ind(m, 1);
@@ -55,11 +54,11 @@ IntegerVector c_mtp(NumericVector p_values, NumericVector alpha, NumericMatrix G
 						Rcout << "----Rejection status: \n";
 						Rf_PrintValue(rst);
 						Rcout << "----Alphas:   \n";
-						Rf_PrintValue(alpha);
+						Rf_PrintValue(alphas);
 						Rcout << "----p-values: \n";
 						Rf_PrintValue(p_values);
 						Rcout << "----G-Matrix: \n";
-						Rf_PrintValue(G);
+						Rf_PrintValue(mat_g);
 				}
 
         // arg_min pval / alpha
@@ -68,7 +67,7 @@ IntegerVector c_mtp(NumericVector p_values, NumericVector alpha, NumericMatrix G
 				for (i = 0; i < m; i ++) {
 						if (0 == h_ind[i])
 								continue;
-						pal = p_values[i] / alpha[i];
+						pal = p_values[i] / alphas[i];
 						if (pal < j_pal) {
 								j_pal = pal;
 								j     = i;
@@ -76,7 +75,7 @@ IntegerVector c_mtp(NumericVector p_values, NumericVector alpha, NumericMatrix G
 				}
 
 				// test hypothesis j
-				if (p_values[j] > alpha[j]) {
+				if (p_values[j] > alphas[j]) {
 						fstop = 1;
 						continue;
 				}
@@ -94,9 +93,9 @@ IntegerVector c_mtp(NumericVector p_values, NumericVector alpha, NumericMatrix G
 						if (0 == h_ind[i])
 								continue;
 
-						alpha[i] += alpha[j] * G(j, i);
+						alphas[i] += alphas[j] * mat_g(j, i);
 				}
-				alpha[j] = 0;
+				alphas[j] = 0;
 
 				// update G
 				for (l = 0; l < m; l++) {
@@ -106,8 +105,8 @@ IntegerVector c_mtp(NumericVector p_values, NumericVector alpha, NumericMatrix G
 										l == k)
 										continue;
 
-								G(l, k) += G(j, k) * G(l, j);
-								G(l, k) /= 1 - G(j, l) * G(l, j);
+								mat_g(l, k) += mat_g(j, k) * mat_g(l, j);
+								mat_g(l, k) /= 1 - mat_g(j, l) * mat_g(l, j);
 						}
 				}
 
@@ -116,7 +115,7 @@ IntegerVector c_mtp(NumericVector p_values, NumericVector alpha, NumericMatrix G
 								if (0 == h_ind[l] |
 										0 == h_ind[k] |
 										l == k)
-										G(l, k) = 0.0;
+										mat_g(l, k) = 0.0;
 						}
 				}
 		}

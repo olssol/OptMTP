@@ -4,14 +4,14 @@
 \alias{c_mtp}
 \title{Multiple testing following the graph}
 \usage{
-c_mtp(p_values, alpha, G, log = FALSE)
+c_mtp(p_values, alphas, mat_g, log = FALSE)
 }
 \arguments{
 \item{p_values}{vector of p-values for the elementary hypothesis}
 
-\item{alpha}{vector of the original alphas}
+\item{alphas}{vector of the original alphas}
 
-\item{G}{transition matrix G}
+\item{mat_g}{transition matrix G}
 
 \item{log}{TRUE: print log at each step; FALSE: silent}
 }

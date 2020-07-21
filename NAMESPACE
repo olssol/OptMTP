@@ -2,7 +2,12 @@
 
 export(c_mtp)
 export(c_test)
+export(om_rejection)
+export(om_rejection_optim)
 export(om_simu)
+export(om_theta_constraints)
+export(om_theta_fill)
+export(om_theta_rejection)
 export(om_z_pval)
 import(Rcpp)
 import(stats)

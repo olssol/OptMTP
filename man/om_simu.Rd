@@ -4,16 +4,18 @@
 \alias{om_simu}
 \title{Simulate endpoint}
 \usage{
-om_simu(n, s_mu, s_sd, s_cor, seed = NULL)
+om_simu(rep, s_mu, s_sd, s_cor, s_size = 1, seed = NULL)
 }
 \arguments{
-\item{n}{number of replications}
+\item{rep}{number of replications}
 
 \item{s_mu}{simulation mean}
 
-\item{s_sd}{simulation SD}
+\item{s_sd}{simulation SD (i.e. individual subject)}
 
-\item{s_cor}{correlation}
+\item{s_cor}{correlation (i.e. individual subject)}
+
+\item{s_size}{sample size}
 }
 \value{
 Matrix of simulated test statistics

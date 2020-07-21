@@ -1,23 +1,23 @@
 #' Simulate endpoint
 #'
-#' @param n     number of replications
-#' @param s_mu  simulation mean
-#' @param s_sd  simulation SD
-#' @param s_cor correlation
+#' @param rep    number of replications
+#' @param s_mu   simulation mean
+#' @param s_sd   simulation SD (i.e. individual subject)
+#' @param s_cor  correlation (i.e. individual subject)
+#' @param s_size sample size
 #'
 #' @return Matrix of simulated test statistics
 #'
 #' @export
 #'
 #'
-om_simu <- function(n, s_mu, s_sd, s_cor, seed = NULL) {
+om_simu <- function(rep, s_mu, s_sd, s_cor, s_size = 1, seed = NULL) {
 
     if (!is.null(seed))
         old_seed <- set.seed(seed)
 
-    rst  <- rmvnorm(n,
-                    mean  = s_mu,
-                    sigma = get_covmat(s_sd, s_cor))
+    sigma <- get_covmat(s_sd / sqrt(s_size), s_cor)
+    rst   <- rmvnorm(rep, mean = s_mu, sigma = sigma)
 
     if (!is.null(seed))
         old_seed <- set.seed(old_seed)
@@ -42,8 +42,8 @@ om_z_pval <- function(stats, null_mu = 0, null_sd = 1,
 
     type    <- match.arg(type)
     n_h     <- ncol(stats)
-    null_mu <- rep(null_mu, n_h)
-    null_sd <- rep(null_sd, n_h)
+    null_mu <- rep(null_mu, length.out = n_h)
+    null_sd <- rep(null_sd, length.out = n_h)
 
     rst <- NULL
     for (i in seq_len(n_h)) {

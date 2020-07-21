@@ -17,16 +17,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // c_mtp
-IntegerVector c_mtp(NumericVector p_values, NumericVector alpha, NumericMatrix G, bool log);
-RcppExport SEXP _optMTP_c_mtp(SEXP p_valuesSEXP, SEXP alphaSEXP, SEXP GSEXP, SEXP logSEXP) {
+IntegerVector c_mtp(NumericVector p_values, NumericVector alphas, NumericMatrix mat_g, bool log);
+RcppExport SEXP _optMTP_c_mtp(SEXP p_valuesSEXP, SEXP alphasSEXP, SEXP mat_gSEXP, SEXP logSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type p_values(p_valuesSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type G(GSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type alphas(alphasSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type mat_g(mat_gSEXP);
     Rcpp::traits::input_parameter< bool >::type log(logSEXP);
-    rcpp_result_gen = Rcpp::wrap(c_mtp(p_values, alpha, G, log));
+    rcpp_result_gen = Rcpp::wrap(c_mtp(p_values, alphas, mat_g, log));
     return rcpp_result_gen;
 END_RCPP
 }
