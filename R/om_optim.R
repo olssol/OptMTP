@@ -207,7 +207,7 @@ om_rejection_optim <- function(weights, mat_g, ...,
         theta <- NULL
         value <- - f_opt(NULL)
     } else {
-        init_theta <- rep(0.000001, rep = ui_ci$tot_theta)
+        init_theta <- rep(0.000001, length.out = ui_ci$tot_theta)
         if (ui_ci$tot_theta > 1) {
             rst <- do.call(constrOptim, c(
                                             list(
