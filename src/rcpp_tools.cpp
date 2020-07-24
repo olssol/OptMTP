@@ -38,6 +38,9 @@ double c_test(double test) {
 IntegerVector c_mtp(NumericVector p_values, NumericVector alphas,
                     NumericMatrix mat_g, bool log = false) {
 
+  NumericVector va = clone(alphas);
+  NumericMatrix mg = clone(mat_g);
+
 		int m = p_values.size();
     IntegerVector h_ind(m, 1);
 		IntegerVector rst(m, 0);
@@ -54,11 +57,11 @@ IntegerVector c_mtp(NumericVector p_values, NumericVector alphas,
 						Rcout << "----Rejection status: \n";
 						Rf_PrintValue(rst);
 						Rcout << "----Alphas:   \n";
-						Rf_PrintValue(alphas);
+						Rf_PrintValue(va);
 						Rcout << "----p-values: \n";
 						Rf_PrintValue(p_values);
 						Rcout << "----G-Matrix: \n";
-						Rf_PrintValue(mat_g);
+						Rf_PrintValue(mg);
 				}
 
         // arg_min pval / alpha
@@ -67,7 +70,7 @@ IntegerVector c_mtp(NumericVector p_values, NumericVector alphas,
 				for (i = 0; i < m; i ++) {
 						if (0 == h_ind[i])
 								continue;
-						pal = p_values[i] / alphas[i];
+						pal = p_values[i] / va[i];
 						if (pal < j_pal) {
 								j_pal = pal;
 								j     = i;
@@ -75,7 +78,7 @@ IntegerVector c_mtp(NumericVector p_values, NumericVector alphas,
 				}
 
 				// test hypothesis j
-				if (p_values[j] > alphas[j]) {
+				if (p_values[j] > va[j]) {
 						fstop = 1;
 						continue;
 				}
@@ -93,9 +96,9 @@ IntegerVector c_mtp(NumericVector p_values, NumericVector alphas,
 						if (0 == h_ind[i])
 								continue;
 
-						alphas[i] += alphas[j] * mat_g(j, i);
+						va[i] += va[j] * mg(j, i);
 				}
-				alphas[j] = 0;
+				va[j] = 0;
 
 				// update G
 				for (l = 0; l < m; l++) {
@@ -105,8 +108,8 @@ IntegerVector c_mtp(NumericVector p_values, NumericVector alphas,
 										l == k)
 										continue;
 
-								mat_g(l, k) += mat_g(j, k) * mat_g(l, j);
-								mat_g(l, k) /= 1 - mat_g(j, l) * mat_g(l, j);
+								mg(l, k) += mg(j, k) * mg(l, j);
+								mg(l, k) /= 1 - mg(j, l) * mg(l, j);
 						}
 				}
 
@@ -115,7 +118,7 @@ IntegerVector c_mtp(NumericVector p_values, NumericVector alphas,
 								if (0 == h_ind[l] |
 										0 == h_ind[k] |
 										l == k)
-										mat_g(l, k) = 0.0;
+										mg(l, k) = 0.0;
 						}
 				}
 		}

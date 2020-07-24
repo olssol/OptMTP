@@ -1,6 +1,6 @@
 Package: optMTP
 Title: Optimized Multiple Testing Procedure
-Version: 1.0
+Version: 1.5
 Authors@R:
     person(given = "Chenguang",
            family = "Wang",
