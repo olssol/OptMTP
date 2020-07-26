@@ -193,6 +193,7 @@ om_theta_constraints <- function(mat, tot = 1) {
 #'
 om_rejection_optim <- function(weights, mat_g, ...,
                                tot = 1,
+                               init_theta = NULL,
                                par_optim = list()) {
 
     f_opt <- function(theta) {
@@ -207,7 +208,12 @@ om_rejection_optim <- function(weights, mat_g, ...,
         theta <- NULL
         value <- - f_opt(NULL)
     } else {
-        init_theta <- rep(0.000001, length.out = ui_ci$tot_theta)
+        if (is.null(init_theta)) {
+            init_theta <- rep(0.000001, length.out = ui_ci$tot_theta)
+        } else {
+            init_theta <- rep(init_theta, length.out = ui_ci$tot_theta)
+        }
+
         if (ui_ci$tot_theta > 1) {
             rst <- do.call(constrOptim, c(
                                             list(
