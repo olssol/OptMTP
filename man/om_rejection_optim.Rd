@@ -4,7 +4,14 @@
 \alias{om_rejection_optim}
 \title{Optimize weights and G}
 \usage{
-om_rejection_optim(weights, mat_g, ..., tot = 1, par_optim = list())
+om_rejection_optim(
+  weights,
+  mat_g,
+  ...,
+  tot = 1,
+  init_theta = NULL,
+  par_optim = list()
+)
 }
 \arguments{
 \item{weights}{vector of the original weights}
@@ -12,6 +19,9 @@ om_rejection_optim(weights, mat_g, ..., tot = 1, par_optim = list())
 \item{mat_g}{transition matrix G}
 
 \item{tot}{restrict on the sum of parameters}
+
+\item{init_theta}{initial values for theta. Default NULL, which will use
+00000.1 fro all theta as initial values.}
 
 \item{par_optim}{options for constrOptim function}
 }

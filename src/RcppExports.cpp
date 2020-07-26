@@ -16,9 +16,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// c_mtp
-IntegerVector c_mtp(NumericVector p_values, NumericVector alphas, NumericMatrix mat_g, bool log);
-RcppExport SEXP _optMTP_c_mtp(SEXP p_valuesSEXP, SEXP alphasSEXP, SEXP mat_gSEXP, SEXP logSEXP) {
+// c_mtp_single
+IntegerVector c_mtp_single(NumericVector p_values, NumericVector alphas, NumericMatrix mat_g, bool log);
+RcppExport SEXP _optMTP_c_mtp_single(SEXP p_valuesSEXP, SEXP alphasSEXP, SEXP mat_gSEXP, SEXP logSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -26,14 +26,28 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type alphas(alphasSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type mat_g(mat_gSEXP);
     Rcpp::traits::input_parameter< bool >::type log(logSEXP);
-    rcpp_result_gen = Rcpp::wrap(c_mtp(p_values, alphas, mat_g, log));
+    rcpp_result_gen = Rcpp::wrap(c_mtp_single(p_values, alphas, mat_g, log));
+    return rcpp_result_gen;
+END_RCPP
+}
+// c_mtp
+IntegerMatrix c_mtp(NumericMatrix p_values, NumericVector alphas, NumericMatrix mat_g);
+RcppExport SEXP _optMTP_c_mtp(SEXP p_valuesSEXP, SEXP alphasSEXP, SEXP mat_gSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type p_values(p_valuesSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type alphas(alphasSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type mat_g(mat_gSEXP);
+    rcpp_result_gen = Rcpp::wrap(c_mtp(p_values, alphas, mat_g));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_optMTP_c_test", (DL_FUNC) &_optMTP_c_test, 1},
-    {"_optMTP_c_mtp", (DL_FUNC) &_optMTP_c_mtp, 4},
+    {"_optMTP_c_mtp_single", (DL_FUNC) &_optMTP_c_mtp_single, 4},
+    {"_optMTP_c_mtp", (DL_FUNC) &_optMTP_c_mtp, 3},
     {NULL, NULL, 0}
 };
 

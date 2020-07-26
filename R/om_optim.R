@@ -18,12 +18,8 @@
 om_rejection <- function(weights, mat_g, p_values, alpha = 0.05,
                          utility = 1, null_h = NULL) {
 
-    rej <- apply(p_values, 1, function(x) {
-        c_mtp(x,
-              mat_g  = mat_g,
-              alphas = alpha * weights)
-    })
-    rej <- t(rej)
+    ## apply algorithm
+    rej <- c_mtp(p_values, alphas = alpha * weights, mat_g  = mat_g)
 
     ## rejection rate separately
     rej_rates <- apply(rej, 2, mean)
@@ -179,6 +175,8 @@ om_theta_constraints <- function(mat, tot = 1) {
 #'
 #' @param par_optim options for constrOptim function
 #' @param tot restrict on the sum of parameters
+#' @param init_theta initial values for theta. Default NULL, which will use
+#'     00000.1 fro all theta as initial values.
 #'
 #' @details Parameters in weights and mat_g should be entered as NA. The
 #'     constraints require all the parameter to be non-negative and each row in
@@ -250,6 +248,9 @@ om_rejection_optim <- function(weights, mat_g, ...,
     }
 
     ## return
+    fill_theta <- om_theta_fill(theta, weights, mat_g)
     list(theta   = theta,
+         weights = fill_theta$weights,
+         mat_g   = fill_theta$mat_g,
          rej_uti = value)
 }
