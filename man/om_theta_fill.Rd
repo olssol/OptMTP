@@ -4,7 +4,7 @@
 \alias{om_theta_fill}
 \title{Fill parameters to the G and weights}
 \usage{
-om_theta_fill(theta = NULL, weights, mat_g, tot = 1)
+om_theta_fill(theta = NULL, weights, mat_g, tot = 1, uncons_theta = TRUE)
 }
 \arguments{
 \item{theta}{parameters in weights and G}
@@ -12,6 +12,10 @@ om_theta_fill(theta = NULL, weights, mat_g, tot = 1)
 \item{weights}{vector of the original weights}
 
 \item{mat_g}{transition matrix G}
+
+\item{uncons_theta}{whether theta are unconstrained. If TRUE, convert using
+exponential function. Example: (row tot - row sum fixed values)
+[e^a/(1+e^a+e^b) e^b/(1+e^a+e^b)]}
 }
 \description{
 Fill parameters to the G and weights

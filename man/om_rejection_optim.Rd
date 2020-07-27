@@ -10,6 +10,7 @@ om_rejection_optim(
   ...,
   tot = 1,
   init_theta = NULL,
+  uncons_theta = TRUE,
   par_optim = list()
 )
 }
@@ -22,6 +23,10 @@ om_rejection_optim(
 
 \item{init_theta}{initial values for theta. Default NULL, which will use
 00000.1 fro all theta as initial values.}
+
+\item{uncons_theta}{whether theta are unconstrained. If TRUE, convert using
+exponential function. Example: (row tot - row sum fixed values)
+[e^a/(1+e^a+e^b) e^b/(1+e^a+e^b)]}
 
 \item{par_optim}{options for constrOptim function}
 }
