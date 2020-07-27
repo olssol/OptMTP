@@ -61,8 +61,8 @@ om_rejection <- function(weights, mat_g, p_values, alpha = 0.05,
 #'
 #' @export
 #'
-om_theta_fill <- function(theta = NULL, weights, mat_g, tot = 1,
-                          uncons_theta = TRUE) {
+om_theta_fill <- function(theta = NULL, weights, mat_g,
+                          uncons_theta = TRUE, tot = 1) {
     fill_vec <- function(vec, ta) {
         if (is.null(ta))
             return(vec)
@@ -121,7 +121,8 @@ om_theta_fill <- function(theta = NULL, weights, mat_g, tot = 1,
 #'
 om_theta_rejection <- function(theta, weights, mat_g,
                                uncons_theta = TRUE, ...) {
-    fill_theta <- om_theta_fill(theta, weights, mat_g, uncons_theta)
+    fill_theta <- om_theta_fill(theta, weights, mat_g,
+                                uncons_theta = uncons_theta)
     om_rejection(fill_theta$weights, fill_theta$mat_g, ...)
 }
 
@@ -158,8 +159,9 @@ om_theta_constraints <- function(mat, tot = 1) {
     rst_ui_0 <- diag(tot_theta)
 
     ## all sum < 1
-    rst_ci_1  <- tot - row_sum
-    rst_ui_1  <- NULL
+    rst_ci_1   <- tot - row_sum
+    rst_ui_1   <- NULL
+    init_theta <- rep(0, tot_theta)
     for (i in seq_len(tot_rows)) {
         if (1 == i) {
             inx_1 <- 1
@@ -172,6 +174,9 @@ om_theta_constraints <- function(mat, tot = 1) {
         c_ui           <- rep(0, tot_theta)
         c_ui[c_inx]    <- 1
 
+        ## set init theta
+        init_theta[c_inx] <- rst_ci_1[i] / (1 + length(c_inx))
+
         ## append
         rst_ui_1 <- rbind(rst_ui_1, c_ui)
     }
@@ -182,9 +187,10 @@ om_theta_constraints <- function(mat, tot = 1) {
 
     ## return
     return(list(
-        ui        = ui,
-        ci        = ci,
-        tot_theta = tot_theta
+        ui         = ui,
+        ci         = ci,
+        init_theta = init_theta,
+        tot_theta  = tot_theta
     ))
 }
 
@@ -218,9 +224,10 @@ om_rejection_optim <- function(weights, mat_g, ...,
 
     ## calculate target function
     f_opt <- function(theta) {
-        uti <-  om_theta_rejection(theta, weights, mat_g,
-                                   uncons_theta, ...)[1]
-        -uti
+        uti <- om_theta_rejection(theta, weights, mat_g,
+                                  uncons_theta, ...)
+
+        - uti[1]
     }
 
     ## constrained optimization
@@ -257,15 +264,12 @@ om_rejection_optim <- function(weights, mat_g, ...,
         rst <- do.call(optim,
                        c(list(par = init_theta,
                               fn = f_opt,
-                              gr = NULL)
-                         ),
-                       par_optim
-                       )
+                              gr = NULL),
+                       par_optim))
         rst
     }
 
-    ## start here
-    type <- match.arg(type)
+    ## ----------------- start here ----------------------------------
 
     ## get constraints, index and boundary
     ui_ci <- om_theta_constraints(rbind(weights, mat_g, tot = tot))
@@ -275,7 +279,7 @@ om_rejection_optim <- function(weights, mat_g, ...,
         if (uncons_theta) {
             tmp <- 0
         } else {
-            tmp <- 0.0000000001
+            tmp <- ui_ci$init_theta
         }
     } else {
         tmp <- init_theta
@@ -303,7 +307,8 @@ om_rejection_optim <- function(weights, mat_g, ...,
     }
 
     ## return
-    fill_theta <- om_theta_fill(theta, weights, mat_g, uncons_theta)
+    fill_theta <- om_theta_fill(theta, weights, mat_g,
+                                uncons_theta = uncons_theta)
     list(theta   = theta,
          weights = fill_theta$weights,
          mat_g   = fill_theta$mat_g,
