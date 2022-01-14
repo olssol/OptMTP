@@ -4,7 +4,7 @@
 \alias{om_theta_fill}
 \title{Fill parameters to the G and weights}
 \usage{
-om_theta_fill(theta = NULL, weights, mat_g, tot = 1, uncons_theta = TRUE)
+om_theta_fill(theta = NULL, weights, mat_g, uncons_theta = TRUE, tot = 1)
 }
 \arguments{
 \item{theta}{parameters in weights and G}

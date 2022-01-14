@@ -19,7 +19,9 @@ om_rejection <- function(weights, mat_g, p_values, alpha = 0.05,
                          utility = 1, null_h = NULL) {
 
     ## apply algorithm
-    rej <- c_mtp(p_values, alphas = alpha * weights, mat_g  = mat_g)
+    rej <- c_mtp(p_values,
+                 alphas = alpha * as.numeric(weights),
+                 mat_g  = mat_g)
 
     ## rejection rate separately
     rej_rates <- apply(rej, 2, mean)
