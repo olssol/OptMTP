@@ -40,3 +40,14 @@ c_mtp <- function(p_values, alphas, mat_g) {
     .Call(`_optMTP_c_mtp`, p_values, alphas, mat_g)
 }
 
+#' A single step in the multiple testing following the graph
+#'
+#'
+#'
+#' @return
+#'
+#' @export
+c_mtp_step <- function(mat_g, weights, h_ind, p_values, alpha) {
+    .Call(`_optMTP_c_mtp_step`, mat_g, weights, h_ind, p_values, alpha)
+}
+

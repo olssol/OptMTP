@@ -43,11 +43,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// c_mtp_step
+int c_mtp_step(NumericMatrix mat_g, NumericVector weights, IntegerVector h_ind, NumericVector p_values, double alpha);
+RcppExport SEXP _optMTP_c_mtp_step(SEXP mat_gSEXP, SEXP weightsSEXP, SEXP h_indSEXP, SEXP p_valuesSEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type mat_g(mat_gSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type weights(weightsSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type h_ind(h_indSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type p_values(p_valuesSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(c_mtp_step(mat_g, weights, h_ind, p_values, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_optMTP_c_test", (DL_FUNC) &_optMTP_c_test, 1},
     {"_optMTP_c_mtp_single", (DL_FUNC) &_optMTP_c_mtp_single, 4},
     {"_optMTP_c_mtp", (DL_FUNC) &_optMTP_c_mtp, 3},
+    {"_optMTP_c_mtp_step", (DL_FUNC) &_optMTP_c_mtp_step, 5},
     {NULL, NULL, 0}
 };
 

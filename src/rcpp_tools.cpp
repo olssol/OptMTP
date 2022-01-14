@@ -156,3 +156,79 @@ IntegerMatrix c_mtp(NumericMatrix p_values, NumericVector alphas,
     // return
     return(rst);
 }
+
+
+//' A single step in the multiple testing following the graph
+//'
+//'
+//'
+//' @return
+//'
+//' @export
+// [[Rcpp::export]]
+int c_mtp_step(NumericMatrix mat_g, NumericVector weights, IntegerVector h_ind,
+               NumericVector p_values, double alpha) {
+
+  int m = p_values.size();
+  int rst;
+
+  int i, j, l, k;
+  double j_pal, pal;
+
+
+  // arg_min pval / alpha
+  j      = 0;
+  j_pal  = R_PosInf;
+  for (i = 0; i < m; i ++) {
+    if (0 == h_ind[i])
+      continue;
+    pal = p_values[i] / (weights[i] * alpha);
+    if (pal < j_pal) {
+      j_pal = pal;
+      j     = i;
+    }
+  }
+  rst = j;
+
+  // test hypothesis j
+  if (p_values[j] > (weights[j] * alpha)) {
+    return(-1);
+  }
+
+  // update tests
+  h_ind[j] = 0;
+
+  // update alpha
+  for (i = 0; i < m; i ++) {
+    if (0 == h_ind[i])
+      continue;
+
+    weights[i] += weights[j] * mat_g(j, i);
+  }
+  weights[j] = 0;
+
+  // update G
+  for (l = 0; l < m; l++) {
+    for (k = 0; k < m; k++) {
+      if (0 == h_ind[l] |
+          0 == h_ind[k] |
+          l == k)
+        continue;
+
+      mat_g(l, k) += mat_g(j, k) * mat_g(l, j);
+      mat_g(l, k) /= 1 - mat_g(j, l) * mat_g(l, j);
+    }
+  }
+
+  for (l = 0; l < m; l++) {
+    for (k = 0; k < m; k++) {
+      if (0 == h_ind[l] |
+          0 == h_ind[k] |
+          l == k)
+        mat_g(l, k) = 0.0;
+    }
+  }
+
+  // return
+  return(rst);
+}
